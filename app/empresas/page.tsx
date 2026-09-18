@@ -2,7 +2,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { createClient } from '../../lib/supabase';
 
 type Empresa = {
@@ -17,14 +16,19 @@ type Empresa = {
 };
 
 export default function Empresas() {
-  const searchParams = useSearchParams();
-  const query = (searchParams.get('q') || '').trim().toLowerCase();
-
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState('');
+  const [query, setQuery] = useState('');
+  const [queryOriginal, setQueryOriginal] = useState('');
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const valor = (params.get('q') || '').trim();
+
+    setQuery(valor.toLowerCase());
+    setQueryOriginal(valor);
+
     async function carregarEmpresas() {
       setLoading(true);
       setErro('');
@@ -73,9 +77,9 @@ export default function Empresas() {
         <h1>Empresas e profissionais</h1>
         <p>Descubra serviços locais e fale diretamente pelo WhatsApp.</p>
 
-        {query && (
+        {queryOriginal && (
           <p>
-            Resultados para: <strong>{searchParams.get('q')}</strong>
+            Resultados para: <strong>{queryOriginal}</strong>
           </p>
         )}
 
