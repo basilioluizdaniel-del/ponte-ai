@@ -1,3 +1,4 @@
+// PONTE.AI — página conectada ao Supabase
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
